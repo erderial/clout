@@ -1,0 +1,52 @@
+clear-host
+#this script removes exchange and sharepoint explorers from your system.
+Write-host "This script removes exchange and sharepoint explorers from your system. Once it finishes you will be notified."
+Write-host "-----------------------------"
+write-host "Checking for Exchange Explorer..."
+$a = Get-WmiObject -Class Win32_Product -Filter "name = 'veeam explorer for microsoft exchange'"
+$b = Get-WmiObject -Class Win32_Product -Filter "name = 'veeam explorer for microsoft sharepoint'"
+if ($a )
+{
+	write-host "Exchange explorer found. Do you want to remove it? Type yes / no ." -foregroundcolor green
+	$explorerEX = read-host
+	if ($explorerEX -eq "yes")
+		{
+			$app = Get-WmiObject -Class Win32_Product -Filter "Name = 'Veeam Explorer for Microsoft Exchange'"
+			$app.uninstall()
+			if ($a)
+				{
+				write-host "The Exchange Explorer has not been removed succesfully. Please try running the script as an Administrator" -foregroundcolor red
+				}
+			else{write-host "Veeam Explorer for exchange has been uninstalled succesfully" -foregroundcolor green}
+		}
+	elseif ($explorerEX -ne "yes")
+		{write-host "You have selected no. Program is terminated." 
+		break}
+}
+else
+{write-host "Veeam explorer for exchange was not found on this machine" -foregroundcolor red}
+Write-host "-----------------------------"
+write-host "Checking for Sharepoint Explorer..."
+if ($b)
+{
+	write-host "Sharepoint explorer has been found. Do you want to remove it? Type yes / no ." -foregroundcolor green
+	$explorerSP = read-host
+	if ($explorerSP -eq "yes")
+		{
+			$app = Get-WmiObject -Class Win32_Product -Filter "Name = 'Veeam Explorer for Microsoft Sharepoint'"
+			$app.uninstall()
+			if ($a)
+				{
+				write-host "The Exchange Explorer has not been removed succesfully. Please try running the script as an Administrator" -foregroundcolor red
+				}
+			else	{write-host "Veeam Explorer for exchange has been uninstalled succesfully" -foregroundcolor green}
+		}
+	elseif ($explorerSP -ne "yes")
+		{write-host "You have selected no. Program is terminated." 
+		break}
+}
+else
+{write-host "Veeam explorer for sharepoint was not found on this machine" -foregroundcolor red}
+write-host "Terminating application."
+Write-host "-----------------------------"
+read-host -prompt "Press Enter to exit"
